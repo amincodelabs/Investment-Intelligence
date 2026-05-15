@@ -33,16 +33,25 @@ sealed interface LoginUiEffect {
     data object NavigateToRegister : LoginUiEffect
 }
 
-class LoginViewModel(
+interface LoginViewModel {
+    val state: LoginUiState
+    val effect: LoginUiEffect?
+
+    fun onEvent(event: LoginUiEvent)
+
+    fun consumeEffect()
+}
+
+class DefaultLoginViewModel(
     private val authRepository: AuthRepository,
-) {
-    var state by mutableStateOf(LoginUiState())
+) : LoginViewModel {
+    override var state by mutableStateOf(LoginUiState())
         private set
 
-    var effect by mutableStateOf<LoginUiEffect?>(null)
+    override var effect by mutableStateOf<LoginUiEffect?>(null)
         private set
 
-    fun onEvent(event: LoginUiEvent) {
+    override fun onEvent(event: LoginUiEvent) {
         when (event) {
             is LoginUiEvent.EmailChanged -> state = state.copy(
                 email = event.value,
@@ -61,7 +70,7 @@ class LoginViewModel(
         }
     }
 
-    fun consumeEffect() {
+    override fun consumeEffect() {
         effect = null
     }
 
@@ -144,16 +153,25 @@ sealed interface RegisterUiEffect {
     data object NavigateToLogin : RegisterUiEffect
 }
 
-class RegisterViewModel(
+interface RegisterViewModel {
+    val state: RegisterUiState
+    val effect: RegisterUiEffect?
+
+    fun onEvent(event: RegisterUiEvent)
+
+    fun consumeEffect()
+}
+
+class DefaultRegisterViewModel(
     private val authRepository: AuthRepository,
-) {
-    var state by mutableStateOf(RegisterUiState())
+) : RegisterViewModel {
+    override var state by mutableStateOf(RegisterUiState())
         private set
 
-    var effect by mutableStateOf<RegisterUiEffect?>(null)
+    override var effect by mutableStateOf<RegisterUiEffect?>(null)
         private set
 
-    fun onEvent(event: RegisterUiEvent) {
+    override fun onEvent(event: RegisterUiEvent) {
         when (event) {
             is RegisterUiEvent.FullNameChanged -> state = state.copy(
                 fullName = event.value,
@@ -185,7 +203,7 @@ class RegisterViewModel(
         }
     }
 
-    fun consumeEffect() {
+    override fun consumeEffect() {
         effect = null
     }
 
