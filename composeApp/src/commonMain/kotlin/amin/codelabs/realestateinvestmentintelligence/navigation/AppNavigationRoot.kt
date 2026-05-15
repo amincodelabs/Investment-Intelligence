@@ -1,7 +1,8 @@
 package amin.codelabs.realestateinvestmentintelligence.navigation
 
+import amin.codelabs.realestateinvestmentintelligence.auth.presentation.LoginRoute
+import amin.codelabs.realestateinvestmentintelligence.auth.presentation.RegisterRoute
 import amin.codelabs.realestateinvestmentintelligence.domain.repository.AuthRepository
-import amin.codelabs.realestateinvestmentintelligence.navigation.ui.AuthPlaceholderScreen
 import amin.codelabs.realestateinvestmentintelligence.navigation.ui.MainPlaceholderScreen
 import amin.codelabs.realestateinvestmentintelligence.navigation.ui.SplashPlaceholderScreen
 import androidx.compose.runtime.Composable
@@ -37,14 +38,14 @@ fun AppNavigationRoot(
             }
         }
 
-        AppRoute.Auth.Login -> AuthPlaceholderScreen(
-            route = AppRoute.Auth.Login,
+        AppRoute.Auth.Login -> LoginRoute(
+            authRepository = authRepository,
             onRegisterClick = { navigate(AppRoute.Auth.Register) },
             onAuthenticated = { navigate(coordinator.routeAfterAuthenticated()) },
         )
 
-        AppRoute.Auth.Register -> AuthPlaceholderScreen(
-            route = AppRoute.Auth.Register,
+        AppRoute.Auth.Register -> RegisterRoute(
+            authRepository = authRepository,
             onLoginClick = { navigate(AppRoute.Auth.Login) },
             onAuthenticated = { navigate(coordinator.routeAfterAuthenticated()) },
         )

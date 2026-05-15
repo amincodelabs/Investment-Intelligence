@@ -34,49 +34,6 @@ fun SplashPlaceholderScreen() {
 }
 
 @Composable
-fun AuthPlaceholderScreen(
-    route: AppRoute.Auth,
-    onAuthenticated: () -> Unit,
-    onLoginClick: () -> Unit = {},
-    onRegisterClick: () -> Unit = {},
-) {
-    AppScreenScaffold {
-        AppCard(modifier = Modifier.fillMaxWidth()) {
-            Column(verticalArrangement = Arrangement.spacedBy(MaterialTheme.appSpacing.md)) {
-                Text(
-                    text = route.label(),
-                    style = MaterialTheme.appTypography.screenTitle,
-                    color = MaterialTheme.appColors.onSurface,
-                )
-                Text(
-                    text = "Authentication UI will be implemented in a feature task.",
-                    style = MaterialTheme.appTypography.body,
-                    color = MaterialTheme.appColors.mutedText,
-                )
-                AppPrimaryButton(
-                    text = "Continue to dashboard",
-                    onClick = onAuthenticated,
-                    modifier = Modifier.fillMaxWidth(),
-                )
-                when (route) {
-                    AppRoute.Auth.Login -> AppOutlinedButton(
-                        text = "Create account",
-                        onClick = onRegisterClick,
-                        modifier = Modifier.fillMaxWidth(),
-                    )
-
-                    AppRoute.Auth.Register -> AppOutlinedButton(
-                        text = "Back to login",
-                        onClick = onLoginClick,
-                        modifier = Modifier.fillMaxWidth(),
-                    )
-                }
-            }
-        }
-    }
-}
-
-@Composable
 fun MainPlaceholderScreen(
     route: AppRoute.Main,
     onTabSelected: (AppRoute.Main) -> Unit,
