@@ -6,12 +6,14 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.hiltAndroid)
+    alias(libs.plugins.kotlinKapt)
 }
 
 kotlin {
     androidTarget {
         compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
+            jvmTarget.set(JvmTarget.JVM_17)
         }
     }
     
@@ -29,6 +31,8 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.activity.compose)
+            implementation(libs.androidx.hilt.navigation.compose)
+            implementation(libs.hilt.android)
         }
         commonMain.dependencies {
             implementation(projects.designSystem)
@@ -69,11 +73,17 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 }
 
 dependencies {
     debugImplementation(libs.compose.uiTooling)
+    add("kapt", libs.hilt.compiler)
+    add("kapt", libs.kotlin.metadata.jvm)
+}
+
+kapt {
+    correctErrorTypes = true
 }

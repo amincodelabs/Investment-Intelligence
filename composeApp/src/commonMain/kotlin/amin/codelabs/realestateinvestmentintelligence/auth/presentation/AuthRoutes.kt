@@ -3,7 +3,6 @@ package amin.codelabs.realestateinvestmentintelligence.auth.presentation
 import amin.codelabs.realestateinvestmentintelligence.domain.repository.AuthRepository
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 
 @Composable
 fun LoginRoute(
@@ -11,9 +10,7 @@ fun LoginRoute(
     onRegisterClick: () -> Unit,
     onAuthenticated: () -> Unit,
 ) {
-    val viewModel = remember(authRepository) {
-        LoginViewModel(authRepository = authRepository)
-    }
+    val viewModel = rememberLoginViewModel(authRepository = authRepository)
     val effect = viewModel.effect
 
     LoginScreen(
@@ -39,9 +36,7 @@ fun RegisterRoute(
     onLoginClick: () -> Unit,
     onAuthenticated: () -> Unit,
 ) {
-    val viewModel = remember(authRepository) {
-        RegisterViewModel(authRepository = authRepository)
-    }
+    val viewModel = rememberRegisterViewModel(authRepository = authRepository)
     val effect = viewModel.effect
 
     RegisterScreen(

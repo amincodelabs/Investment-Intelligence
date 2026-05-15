@@ -18,7 +18,7 @@ import kotlin.test.assertNull
 class AuthViewModelsTest {
     @Test
     fun `login view model starts with empty state`() {
-        val viewModel = LoginViewModel(FakeAuthRepository())
+        val viewModel = DefaultLoginViewModel(FakeAuthRepository())
 
         assertEquals(LoginUiState(), viewModel.state)
         assertNull(viewModel.effect)
@@ -29,7 +29,7 @@ class AuthViewModelsTest {
         val repository = FakeAuthRepository(
             loginResult = AuthResult.Success(authenticatedSession()),
         )
-        val viewModel = LoginViewModel(repository)
+        val viewModel = DefaultLoginViewModel(repository)
 
         viewModel.onEvent(LoginUiEvent.EmailChanged("investor@example.com"))
         viewModel.onEvent(LoginUiEvent.PasswordChanged("password123"))
@@ -46,7 +46,7 @@ class AuthViewModelsTest {
         val repository = FakeAuthRepository(
             loginResult = AuthResult.Failure(AuthError.InvalidCredentials),
         )
-        val viewModel = LoginViewModel(repository)
+        val viewModel = DefaultLoginViewModel(repository)
 
         viewModel.onEvent(LoginUiEvent.EmailChanged("investor@example.com"))
         viewModel.onEvent(LoginUiEvent.PasswordChanged("wrong-password"))
@@ -71,7 +71,7 @@ class AuthViewModelsTest {
                 ),
             ),
         )
-        val viewModel = RegisterViewModel(repository)
+        val viewModel = DefaultRegisterViewModel(repository)
 
         viewModel.onEvent(RegisterUiEvent.SubmitClicked)
 
@@ -87,7 +87,7 @@ class AuthViewModelsTest {
         val repository = FakeAuthRepository(
             registerResult = AuthResult.Success(authenticatedSession()),
         )
-        val viewModel = RegisterViewModel(repository)
+        val viewModel = DefaultRegisterViewModel(repository)
 
         viewModel.onEvent(RegisterUiEvent.FullNameChanged("Amina Ali"))
         viewModel.onEvent(RegisterUiEvent.EmailChanged("amina@example.com"))
@@ -106,7 +106,7 @@ class AuthViewModelsTest {
 
     @Test
     fun `login navigation effect is emitted when register link is clicked`() {
-        val viewModel = LoginViewModel(FakeAuthRepository())
+        val viewModel = DefaultLoginViewModel(FakeAuthRepository())
 
         viewModel.onEvent(LoginUiEvent.RegisterClicked)
 
