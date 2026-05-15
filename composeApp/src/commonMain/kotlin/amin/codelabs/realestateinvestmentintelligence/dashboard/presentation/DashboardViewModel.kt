@@ -13,17 +13,25 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 
-class DashboardViewModel(
+interface DashboardViewModel {
+    val state: DashboardUiState
+    val effect: DashboardUiEffect?
+
+    fun onEvent(event: DashboardUiEvent)
+    fun consumeEffect()
+}
+
+class DefaultDashboardViewModel(
     private val getDashboardOverviewUseCase: GetDashboardOverviewUseCase,
     private val logger: DashboardLogger = NoOpDashboardLogger,
-) {
-    var state by mutableStateOf<DashboardUiState>(DashboardUiState.Loading)
+) : DashboardViewModel {
+    override var state by mutableStateOf<DashboardUiState>(DashboardUiState.Loading)
         private set
 
-    var effect by mutableStateOf<DashboardUiEffect?>(null)
+    override var effect by mutableStateOf<DashboardUiEffect?>(null)
         private set
 
-    fun onEvent(event: DashboardUiEvent) {
+    override fun onEvent(event: DashboardUiEvent) {
         when (event) {
             DashboardUiEvent.LoadDashboard,
             DashboardUiEvent.RetryClicked,
@@ -46,7 +54,7 @@ class DashboardViewModel(
         }
     }
 
-    fun consumeEffect() {
+    override fun consumeEffect() {
         effect = null
     }
 

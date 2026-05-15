@@ -148,7 +148,7 @@ class DashboardViewModelTest {
             savedProperties = savedProperties,
         ),
         logger: DashboardLogger = NoOpDashboardLogger,
-    ): DashboardViewModel = DashboardViewModel(
+    ): DashboardViewModel = DefaultDashboardViewModel(
         getDashboardOverviewUseCase = GetDashboardOverviewUseCase(
             areaRepository = areaRepository,
             propertyRepository = propertyRepository,
