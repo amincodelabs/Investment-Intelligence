@@ -1,5 +1,6 @@
 package amin.codelabs.realestateinvestmentintelligence.navigation
 
+import amin.codelabs.realestateinvestmentintelligence.area.presentation.AreaIntelligenceRoute
 import amin.codelabs.realestateinvestmentintelligence.auth.presentation.LoginRoute
 import amin.codelabs.realestateinvestmentintelligence.auth.presentation.RegisterRoute
 import amin.codelabs.realestateinvestmentintelligence.dashboard.presentation.DashboardRoute
@@ -64,6 +65,26 @@ fun AppNavigationRoot(
             onAreaClick = { areaId -> navigate(AppRoute.Main.AreaDetails(areaId)) },
             onPropertyClick = { propertyId -> navigate(AppRoute.Main.PropertyDetails(propertyId)) },
             onWatchlistClick = { navigate(AppRoute.Main.Watchlist) },
+        )
+
+        AppRoute.Main.Areas -> AreaIntelligenceRoute(
+            areaId = null,
+            areaRepository = areaRepository,
+            propertyRepository = propertyRepository,
+            watchlistRepository = watchlistRepository,
+            onAreaClick = { areaId -> navigate(AppRoute.Main.AreaDetails(areaId)) },
+            onPropertyClick = { propertyId -> navigate(AppRoute.Main.PropertyDetails(propertyId)) },
+            onBackClick = { navigate(AppRoute.Main.Dashboard) },
+        )
+
+        is AppRoute.Main.AreaDetails -> AreaIntelligenceRoute(
+            areaId = route.areaId,
+            areaRepository = areaRepository,
+            propertyRepository = propertyRepository,
+            watchlistRepository = watchlistRepository,
+            onAreaClick = { areaId -> navigate(AppRoute.Main.AreaDetails(areaId)) },
+            onPropertyClick = { propertyId -> navigate(AppRoute.Main.PropertyDetails(propertyId)) },
+            onBackClick = { navigate(AppRoute.Main.Areas) },
         )
 
         is AppRoute.Main -> {
