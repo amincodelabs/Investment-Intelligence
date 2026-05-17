@@ -12,6 +12,7 @@ import amin.codelabs.realestateinvestmentintelligence.domain.repository.Watchlis
 import amin.codelabs.realestateinvestmentintelligence.navigation.ui.MainPlaceholderScreen
 import amin.codelabs.realestateinvestmentintelligence.navigation.ui.SplashPlaceholderScreen
 import amin.codelabs.realestateinvestmentintelligence.property.presentation.PropertyDetailsRoute
+import amin.codelabs.realestateinvestmentintelligence.watchlist.presentation.WatchlistRoute
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -99,6 +100,12 @@ fun AppNavigationRoot(
         )
 
         AppRoute.Main.Calculator -> InvestmentCalculatorRoute()
+
+        AppRoute.Main.Watchlist -> WatchlistRoute(
+            watchlistRepository = watchlistRepository,
+            onAreaClick = { areaId -> navigate(AppRoute.Main.AreaDetails(areaId)) },
+            onPropertyClick = { propertyId -> navigate(AppRoute.Main.PropertyDetails(propertyId)) },
+        )
 
         is AppRoute.Main -> {
             MainPlaceholderScreen(
