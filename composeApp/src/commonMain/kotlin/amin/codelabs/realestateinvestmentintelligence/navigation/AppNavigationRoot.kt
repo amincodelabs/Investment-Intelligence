@@ -3,6 +3,7 @@ package amin.codelabs.realestateinvestmentintelligence.navigation
 import amin.codelabs.realestateinvestmentintelligence.area.presentation.AreaIntelligenceRoute
 import amin.codelabs.realestateinvestmentintelligence.auth.presentation.LoginRoute
 import amin.codelabs.realestateinvestmentintelligence.auth.presentation.RegisterRoute
+import amin.codelabs.realestateinvestmentintelligence.calculator.presentation.InvestmentCalculatorRoute
 import amin.codelabs.realestateinvestmentintelligence.dashboard.presentation.DashboardRoute
 import amin.codelabs.realestateinvestmentintelligence.domain.repository.AreaRepository
 import amin.codelabs.realestateinvestmentintelligence.domain.repository.AuthRepository
@@ -96,6 +97,8 @@ fun AppNavigationRoot(
             onComparisonClick = { navigate(AppRoute.Main.Comparison) },
             onBackClick = { navigate(AppRoute.Main.Dashboard) },
         )
+
+        AppRoute.Main.Calculator -> InvestmentCalculatorRoute()
 
         is AppRoute.Main -> {
             MainPlaceholderScreen(

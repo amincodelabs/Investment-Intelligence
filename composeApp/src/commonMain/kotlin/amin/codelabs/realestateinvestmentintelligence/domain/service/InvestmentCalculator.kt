@@ -17,25 +17,28 @@ object InvestmentCalculator {
         val annualRent = input.annualRent ?: return InvestmentCalculationResult.Incomplete(
             listOf(InvestmentCalculationError.MissingAnnualRent),
         )
+        val adjustedAnnualRent = input.occupancyRatePercentage?.let { occupancyRate ->
+            annualRent.copy(amount = annualRent.amount * (occupancyRate / PERCENT_MULTIPLIER))
+        } ?: annualRent
         val annualCosts = input.annualCosts ?: Money.zero(propertyPrice.currency)
         val sizeSqft = input.sizeSqft ?: return InvestmentCalculationResult.Incomplete(
             listOf(InvestmentCalculationError.MissingSizeSqft),
         )
         val monthlyMortgagePayment = input.monthlyMortgagePayment ?: Money.zero(propertyPrice.currency)
 
-        val monthlyRent = monthlyRent(annualRent)
+        val monthlyRent = monthlyRent(adjustedAnnualRent)
         val monthlyCosts = monthlyCosts(annualCosts)
         val monthlyCashFlow = monthlyRent - monthlyCosts - monthlyMortgagePayment
         val annualCashFlow = annualCashFlow(
-            annualRent = annualRent,
+            annualRent = adjustedAnnualRent,
             annualCosts = annualCosts,
             annualMortgagePayments = monthlyMortgagePayment.amount * MONTHS_IN_YEAR,
         )
 
         return InvestmentCalculationResult.Complete(
             InvestmentMetrics(
-                grossRentalYield = grossRentalYield(annualRent, propertyPrice),
-                netRentalYield = netRentalYield(annualRent, annualCosts, propertyPrice),
+                grossRentalYield = grossRentalYield(adjustedAnnualRent, propertyPrice),
+                netRentalYield = netRentalYield(adjustedAnnualRent, annualCosts, propertyPrice),
                 monthlyRent = monthlyRent,
                 monthlyCosts = monthlyCosts,
                 monthlyCashFlow = monthlyCashFlow,
@@ -124,6 +127,12 @@ object InvestmentCalculator {
             }
         }
 
+        occupancyRatePercentage?.let {
+            if (!it.isFinite() || it < 0.0 || it > PERCENT_MULTIPLIER) {
+                errors += InvestmentCalculationError.InvalidOccupancyRate
+            }
+        }
+
         initialInvestment?.let {
             if (!it.isPositive()) {
                 errors += InvestmentCalculationError.InvalidInitialInvestment
@@ -159,6 +168,7 @@ data class InvestmentCalculationInput(
     val annualCosts: Money? = null,
     val sizeSqft: Double?,
     val monthlyMortgagePayment: Money? = null,
+    val occupancyRatePercentage: Double? = null,
     val appreciationRatePercentage: Double? = null,
     val initialInvestment: Money? = null,
 )
@@ -182,6 +192,7 @@ enum class InvestmentCalculationError {
     MissingSizeSqft,
     InvalidSizeSqft,
     InvalidMonthlyMortgagePayment,
+    InvalidOccupancyRate,
     InvalidAppreciationRate,
     InvalidInitialInvestment,
     CurrencyMismatch,

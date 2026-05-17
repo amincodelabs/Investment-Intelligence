@@ -116,6 +116,22 @@ class InvestmentCalculatorTest {
     }
 
     @Test
+    fun `calculate adjusts annual rent by occupancy rate`() {
+        val result = InvestmentCalculator.calculate(
+            validInput(
+                propertyPrice = Money(1_000_000.0),
+                annualRent = Money(100_000.0),
+                annualCosts = Money(10_000.0),
+                occupancyRatePercentage = 90.0,
+            ),
+        )
+
+        val metrics = result.requireMetrics()
+        assertDoubleEquals(9.0, metrics.grossRentalYield.percentage)
+        assertDoubleEquals(80_000.0, metrics.annualCashFlow.amount)
+    }
+
+    @Test
     fun `calculate returns invalid property price for zero price`() {
         val result = InvestmentCalculator.calculate(
             validInput(propertyPrice = Money(0.0)),
@@ -173,6 +189,16 @@ class InvestmentCalculatorTest {
     }
 
     @Test
+    fun `calculate returns invalid occupancy rate when outside percentage range`() {
+        val result = InvestmentCalculator.calculate(
+            validInput(occupancyRatePercentage = 120.0),
+        )
+
+        val incomplete = result.requireIncomplete()
+        assertTrue(InvestmentCalculationError.InvalidOccupancyRate in incomplete.errors)
+    }
+
+    @Test
     fun `calculate preserves negative monthly cash flow`() {
         val result = InvestmentCalculator.calculate(
             validInput(
@@ -206,6 +232,7 @@ class InvestmentCalculatorTest {
         annualCosts: Money = Money(12_000.0),
         sizeSqft: Double = 1_000.0,
         monthlyMortgagePayment: Money? = null,
+        occupancyRatePercentage: Double? = null,
         appreciationRatePercentage: Double? = null,
         initialInvestment: Money? = null,
     ) = InvestmentCalculationInput(
@@ -214,6 +241,7 @@ class InvestmentCalculatorTest {
         annualCosts = annualCosts,
         sizeSqft = sizeSqft,
         monthlyMortgagePayment = monthlyMortgagePayment,
+        occupancyRatePercentage = occupancyRatePercentage,
         appreciationRatePercentage = appreciationRatePercentage,
         initialInvestment = initialInvestment,
     )
