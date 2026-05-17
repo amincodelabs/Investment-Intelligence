@@ -74,6 +74,10 @@ class DefaultPropertyDetailsViewModel(
     private fun loadProperty(propertyId: String) {
         lastPropertyId = propertyId
         logger.log(PropertyDetailsLogEvent.LoadStarted)
+        if (propertyId.isBlank()) {
+            state = PropertyDetailsUiState.Empty
+            return
+        }
         state = PropertyDetailsUiState.Loading
 
         when (val result = getPropertyDetailsUseCase.execute(propertyId)) {
@@ -162,6 +166,8 @@ class DefaultPropertyDetailsViewModel(
 
 sealed interface PropertyDetailsUiState {
     data object Loading : PropertyDetailsUiState
+
+    data object Empty : PropertyDetailsUiState
 
     data class Content(
         val content: PropertyDetailsContent,

@@ -66,6 +66,15 @@ class PropertyDetailsViewModelTest {
     }
 
     @Test
+    fun `blank property id returns empty state`() {
+        val viewModel = createViewModel()
+
+        viewModel.onEvent(PropertyDetailsUiEvent.LoadProperty(""))
+
+        assertEquals(PropertyDetailsUiState.Empty, viewModel.state)
+    }
+
+    @Test
     fun `retry reloads last property after error`() {
         val propertyRepository = FakePropertyRepository(
             propertiesResult = RepositoryResult.Failure(RepositoryError.Unknown),
