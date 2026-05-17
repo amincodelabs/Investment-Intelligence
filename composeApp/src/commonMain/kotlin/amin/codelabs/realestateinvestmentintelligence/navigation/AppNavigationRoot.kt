@@ -10,6 +10,7 @@ import amin.codelabs.realestateinvestmentintelligence.domain.repository.Property
 import amin.codelabs.realestateinvestmentintelligence.domain.repository.WatchlistRepository
 import amin.codelabs.realestateinvestmentintelligence.navigation.ui.MainPlaceholderScreen
 import amin.codelabs.realestateinvestmentintelligence.navigation.ui.SplashPlaceholderScreen
+import amin.codelabs.realestateinvestmentintelligence.property.presentation.PropertyDetailsRoute
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -85,6 +86,15 @@ fun AppNavigationRoot(
             onAreaClick = { areaId -> navigate(AppRoute.Main.AreaDetails(areaId)) },
             onPropertyClick = { propertyId -> navigate(AppRoute.Main.PropertyDetails(propertyId)) },
             onBackClick = { navigate(AppRoute.Main.Areas) },
+        )
+
+        is AppRoute.Main.PropertyDetails -> PropertyDetailsRoute(
+            propertyId = route.propertyId,
+            propertyRepository = propertyRepository,
+            watchlistRepository = watchlistRepository,
+            onAreaClick = { areaId -> navigate(AppRoute.Main.AreaDetails(areaId)) },
+            onComparisonClick = { navigate(AppRoute.Main.Comparison) },
+            onBackClick = { navigate(AppRoute.Main.Dashboard) },
         )
 
         is AppRoute.Main -> {
